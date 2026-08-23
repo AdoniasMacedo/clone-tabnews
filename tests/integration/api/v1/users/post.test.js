@@ -32,7 +32,7 @@ describe("POST /api/v1/users", () => {
         id: responseBody.id,
         username: "filipedeschamps",
         email: "contato@curso.dev",
-        features: [],
+        features: ["read:activation_token"],
         password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
@@ -129,8 +129,8 @@ describe("POST /api/v1/users", () => {
 
       expect(response2Body).toEqual({
         name: "ValidationError",
-        message: "O nome de usuário informado já está sendo utilizado.",
-        action: "Utilize outro nome de usuário para realizar esta operação.",
+        message: "O username informado já está sendo utilizado.",
+        action: "Utilize outro username para realizar esta operação.",
         status_code: 400,
       });
     });
