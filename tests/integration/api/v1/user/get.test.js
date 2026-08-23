@@ -37,6 +37,7 @@ describe("GET /api/v1/user", () => {
         id: createdUser.id,
         username: "UserWithValidSession",
         email: createdUser.email,
+        features: [],
         password: createdUser.password,
         created_at: createdUser.created_at.toISOString(),
         updated_at: createdUser.updated_at.toISOString(),
@@ -46,7 +47,7 @@ describe("GET /api/v1/user", () => {
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
-      //Session renewal assertions
+      // Session renewal assertions
       const renewedSessionObject = await session.findOneValidByToken(
         sessionObject.token,
       );
@@ -99,6 +100,7 @@ describe("GET /api/v1/user", () => {
         id: createdUser.id,
         username: "UserWithHalfwayExpiredSession",
         email: createdUser.email,
+        features: [],
         password: createdUser.password,
         created_at: createdUser.created_at.toISOString(),
         updated_at: createdUser.updated_at.toISOString(),
@@ -136,7 +138,7 @@ describe("GET /api/v1/user", () => {
 
     test("With nonexistent session", async () => {
       const nonexistentToken =
-        "91ec045329600939f4a114df2fcb6c9da7f2cf90159f0b92910228a0731cc76803899b03818717c4f875099f40337c01";
+        "f0b62a5ff97ae607701ceeee2e3c4987c4b9debb534410e2444f9eb2288b6e3b90158a71d086e31eabef9b36cbb549e1";
 
       const response = await fetch("http://localhost:3000/api/v1/user", {
         headers: {
