@@ -1,6 +1,6 @@
 import { version as uuidVersion } from "uuid";
 import setCookieParser from "set-cookie-parser";
-import orchestrator from "tests/orchestrator";
+import orchestrator from "tests/orchestrator.js";
 import session from "models/session.js";
 
 beforeAll(async () => {
@@ -22,13 +22,15 @@ describe("POST /api/v1/sessions", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "email.errado@gmail.com",
+          email: "email.errado@curso.dev",
           password: "senha-correta",
         }),
       });
+
       expect(response.status).toBe(401);
 
       const responseBody = await response.json();
+
       expect(responseBody).toEqual({
         name: "UnauthorizedError",
         message: "Dados de autenticação não conferem.",
@@ -39,7 +41,7 @@ describe("POST /api/v1/sessions", () => {
 
     test("With correct `email` but incorrect `password`", async () => {
       await orchestrator.createUser({
-        email: "email.correto@gmail.com",
+        email: "email.correto@curso.dev",
       });
 
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
@@ -48,13 +50,15 @@ describe("POST /api/v1/sessions", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "email.correto@gmail.com",
+          email: "email.correto@curso.dev",
           password: "senha-incorreta",
         }),
       });
+
       expect(response.status).toBe(401);
 
       const responseBody = await response.json();
+
       expect(responseBody).toEqual({
         name: "UnauthorizedError",
         message: "Dados de autenticação não conferem.",
@@ -72,13 +76,15 @@ describe("POST /api/v1/sessions", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "email.incorreto@gmail.com",
+          email: "email.incorreto@curso.dev",
           password: "senha-incorreta",
         }),
       });
+
       expect(response.status).toBe(401);
 
       const responseBody = await response.json();
+
       expect(responseBody).toEqual({
         name: "UnauthorizedError",
         message: "Dados de autenticação não conferem.",
@@ -93,6 +99,8 @@ describe("POST /api/v1/sessions", () => {
         password: "tudocorreto",
       });
 
+      await orchestrator.activateUser(createdUser);
+
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
         method: "POST",
         headers: {
@@ -103,9 +111,11 @@ describe("POST /api/v1/sessions", () => {
           password: "tudocorreto",
         }),
       });
+
       expect(response.status).toBe(201);
 
       const responseBody = await response.json();
+
       expect(responseBody).toEqual({
         id: responseBody.id,
         token: responseBody.token,
